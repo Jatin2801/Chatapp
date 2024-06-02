@@ -1,0 +1,5 @@
+.chat{
+    display: flex;
+    flex-direction: column;
+    flex: 0.65; /* coz we gave 35% screen to sidebar  */
+}
