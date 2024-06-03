@@ -3,6 +3,7 @@
     place-items: center;
     height: 100vh;
     background-color: rgb(224, 217, 208);
+    scroll-behavior: smooth;
 }
 
 .app_body{
