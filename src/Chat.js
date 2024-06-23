@@ -1,10 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Chat.css'
-import { Avatar , IconButton} from '@mui/material'
-import { AttachFile, InsertEmoticon, MoreVert, SearchOutlined ,} from '@mui/icons-material'
+import { Avatar, IconButton } from '@mui/material'
+import { AttachFile, InsertEmoticon, MoreVert, SearchOutlined, } from '@mui/icons-material'
 import MicIcon from '@mui/icons-material/Mic';
+import axios from './axios'
 
-function Chat() {
+function Chat({ messages }) {
+
+//For typing and sending messages 
+//we gave input value as input so we can accesss it here 
+const[input,setInput] = useState('')
+
+const sendmsg = async(e) =>{
+  e.preventDefault();
+
+ await axios.post('/messages/new',{
+    message: input , // the input which we give in box in chat window
+    name : "Demo" ,
+    received : false 
+  })
+  setInput('')
+}
+
   return (
     <div className='chat'>
       <div className='chat_header'>
@@ -16,61 +33,48 @@ function Chat() {
         </div>
 
         <div className='chat_headerRight'>
-        <IconButton>
-          <SearchOutlined/>
-        </IconButton>
-        <IconButton>
-          <AttachFile/>
-        </IconButton>
-        <IconButton>
-          <MoreVert/>
-        </IconButton>
+          <IconButton>
+            <SearchOutlined />
+          </IconButton>
+          <IconButton>
+            <AttachFile />
+          </IconButton>
+          <IconButton>
+            <MoreVert />
+          </IconButton>
         </div>
       </div>
 
       <div className='chatBody'>
-    <ChatBody/>
-    <ChatBody/>
-    <ChatBody/>
-    <ChatBody/>
-    <ChatBodyrecei/>
-    <ChatBody/>  
-    <ChatBody/> 
-    <ChatBody/> 
-    </div>
+        {messages.map(message => (
+          <p className={`chat_msg ${!message.received && "chat_receiver"} `}>
+            <span className='chat_name'> {message.name}</span>
+              {message.message} 
+            <span className='timestamp'> {new Date().toUTCString()}</span>
+          </p>
+        ))}
 
-    <div className='chat_footer'>
-      <InsertEmoticon/>
-      <form>
-        <input type='text' placeholder='Type a message..'/>
-        <button type='submit'>
-          Send A Message
-        </button>
-      </form>
-      <MicIcon/>
-    </div>
+
+        <p className='chat_msg chat_receiver'>
+          <span className='chat_name'> Jatin</span>
+          This is a msg
+          <span className='timestamp'> {new Date().toUTCString()}</span>
+        </p>
+
+      </div>
+
+      <div className='chat_footer'>
+        <InsertEmoticon />
+        <form>
+          <input value={input} onChange={(e)=>setInput(e.target.value)} type='text' placeholder='Type a message..' /> 
+          <button onClick={sendmsg} type='submit'>
+            Send A Message
+          </button>
+        </form>
+        <MicIcon />
+      </div>
     </div>
   )
-}
-
-function ChatBody(){
-  return( 
-  <p className='chat_msg'>
-    <span className='chat_name'> Jatin</span>
-    This is a msg 
-    <span className='timestamp'> {new Date().toUTCString()}</span>
-  </p>
-)
-}
-
-function ChatBodyrecei(){
-  return(
-  <p className='chat_msg chat_receiver'>
-    <span className='chat_name'> Jatin</span>
-    This is a msg 
-    <span className='timestamp'> {new Date().toUTCString()}</span>
-  </p>
-)
 }
 
 export default Chat

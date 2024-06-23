@@ -23,7 +23,7 @@ useEffect(()=>{ // this will trigger only once page is loaded
 
   var channel = pusher.subscribe('messages');// this messages from pusher trigger in backend server file 
   channel.bind('inserted', function(newMesaage) {
-    alert(JSON.stringify(newMesaage)); // as new data is given in DB
+    //alert(JSON.stringify(newMesaage)); // as new data is given in DB
     setMessages([...messages,newMesaage]) // as new data is added store it in messages array with old ones still present 
   });
 //cleanup 
@@ -40,7 +40,8 @@ return()=>{
     <div className="App">
       <div className='app_body'>
         <Sidebar />
-        <Chat />
+        <Chat messages={messages} /> 
+        {/* we used props in chat  */}
       </div>
     </div>
   );
